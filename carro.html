@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fórmula 1 - CSS Puro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Efeito de pista de corrida */
+        body::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #333 0px,
+                    #333 50px,
+                    #444 50px,
+                    #444 100px
+                ),
+                linear-gradient(180deg, transparent 0%, #222 50%, #111 100%);
+            animation: trackMove 2s linear infinite;
+        }
+
+        @keyframes trackMove {
+            0% { background-position: 0px 0px, 0px 0px; }
+            100% { background-position: -100px 0px, 0px 0px; }
+        }
+
+        .f1-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .f1-car {
+            width: 400px;
+            height: 120px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: carHover 4s ease-in-out infinite;
+        }
+
+        /* Corpo principal do carro */
+        .car-chassis {
+            width: 350px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff1744 0%, #d50000 50%, #b71c1c 100%);
+            border-radius: 25px 25px 10px 10px;
+            position: absolute;
+            top: 40px;
+            left: 25px;
+            box-shadow: 
+                0 10px 30px rgba(255, 23, 68, 0.4),
+                inset 0 5px 15px rgba(255, 255, 255, 0.2),
+                inset 0 -5px 15px rgba(0, 0, 0, 0.3);
+            transform: rotateX(5deg);
+        }
+
+        /* Cockpit/Cabine do piloto */
+        .cockpit {
+            width: 180px;
+            height: 50px;
+            background: 
+                linear-gradient(135deg, #263238 0%, #37474f 50%, #455a64 100%);
+            border-radius: 25px 25px 15px 15px;
+            position: absolute;
+            top: 10px;
+            left: 110px;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.6),
+                inset 0 3px 10px rgba(255, 255, 255, 0.1);
+            border: 2px solid #546e7a;
+        }
+
+        /* Vidro do cockpit */
+        .cockpit::before {
+            content: '';
+            width: 160px;
+            height: 35px;
+            background: linear-gradient(135deg, 
+                rgba(0, 150, 255, 0.3) 0%, 
+                rgba(0, 100, 200, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 20px 20px 10px 10px;
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            backdrop-filter: blur(2px);
+            box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Bico/Nariz do carro */
+        .nose {
+            width: 80px;
+            height: 25px;
+            background: linear-gradient(135deg, #ff5722 0%, #d84315 100%);
+            border-radius: 0 50px 50px 0;
+            position: absolute;
+            top: 47px;
+            left: 0;
+            box-shadow: 
+                0 5px 20px rgba(255, 87, 34, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.3);
+            transform: rotateX(10deg);
+        }
+
+        /* Asa dianteira */
+        .front-wing {
+            width: 120px;
+            height: 8px;
+            background: linear-gradient(135deg, #212121 0%, #424242 100%);
+            border-radius: 5px;
+            position: absolute;
+            top: 65px;
+            left: -10px;
+            box-shadow: 
+                0 3px 15px rgba(0, 0, 0, 0.5),
+                inset 0 1px 3px rgba(255, 255, 255, 0.2);
+        }
+
+        .front-wing::before,
+        .front-wing::after {
+            content: '';
+            width: 30px;
+            height: 6px;
+            background: linear-gradient(135deg, #37474f 0%, #546e7a 100%);
+            border-radius: 3px;
+            position: absolute;
+            top: -10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .front-wing::before { left: 20px; }
+        .front-wing::after { right: 20px; }
+
+        /* Asa traseira */
+        .rear-wing {
+            width: 100px;
+            height: 60px;
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            transform: rotateX(-15deg);
+        }
+
+        .rear-wing-main {
+            width: 100px;
+            height: 12px;
+            background: linear-gradient(135deg, #212121 0%, #424242 100%);
+            border-radius: 8px;
+            position: absolute;
+            top: 25px;
+            box-shadow: 
+                0 5px 20px rgba(0, 0, 0, 0.4),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+        }
+
+        .rear-wing-support {
+            width: 8px;
+            height: 35px;
+            background: linear-gradient(180deg, #37474f 0%, #263238 100%);
+            border-radius: 4px;
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Rodas dianteiras */
+        .front-wheel {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, #616161 0%, #424242 40%, #212121 70%, #000 100%);
+            position: absolute;
+            top: 30px;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.6),
+                inset 0 5px 15px rgba(255, 255, 255, 0.1),
+                inset 0 -5px 15px rgba(0, 0, 0, 0.5);
+            animation: wheelSpin 0.8s linear infinite;
+            border: 3px solid #37474f;
+        }
+
+        .front-wheel.left { left: 40px; }
+        .front-wheel.right { right: 40px; }
+
+        /* Rodas traseiras */
+        .rear-wheel {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, #616161 0%, #424242 40%, #212121 70%, #000 100%);
+            position: absolute;
+            top: 20px;
+            box-shadow: 
+                0 10px 35px rgba(0, 0, 0, 0.7),
+                inset 0 8px 20px rgba(255, 255, 255, 0.1),
+                inset 0 -8px 20px rgba(0, 0, 0, 0.6);
+            animation: wheelSpin 0.8s linear infinite;
+            border: 4px solid #37474f;
+        }
+
+     
+        .rear-wheel.right { right: 60px; }
+
+        /* Detalhes dos pneus */
+        .tire-detail {
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle, transparent 30%, #1a1a1a 30%, #1a1a1a 35%, transparent 35%),
+                radial-gradient(circle, transparent 50%, #2d2d2d 50%, #2d2d2d 55%, transparent 55%),
+                conic-gradient(from 0deg, #333, #555, #333, #555, #333);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Espelhos retrovisores */
+        .mirror {
+            width: 15px;
+            height: 8px;
+            background: linear-gradient(135deg, #37474f 0%, #546e7a 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .mirror.left { 
+            left: 95px;
+            transform: rotate(-10deg);
+        }
+        .mirror.right { 
+            right: 95px;
+            transform: rotate(10deg);
+        }
+
+        /* Números do carro */
+        .car-number {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #d50000;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #ff1744;
+        }
+
+        /* Efeitos de velocidade */
+        .speed-lines {
+            position: absolute;
+            width: 600px;
+            height: 4px;
+            left: -200px;
+            top: 60px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.6) 30%, 
+                rgba(255, 255, 255, 0.8) 50%, 
+                rgba(255, 255, 255, 0.6) 70%, 
+                transparent 100%);
+            opacity: 0;
+            animation: speedLines 3s ease-in-out infinite;
+        }
+
+        /* Partículas de poeira */
+        .dust-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: dustFloat 2s ease-out infinite;
+        }
+
+        .dust-particle:nth-child(1) {
+            left: 380px;
+            top: 80px;
+            animation-delay: 0s;
+        }
+
+        .dust-particle:nth-child(2) {
+            left: 390px;
+            top: 90px;
+            animation-delay: 0.3s;
+        }
+
+        .dust-particle:nth-child(3) {
+            left: 385px;
+            top: 70px;
+            animation-delay: 0.6s;
+        }
+
+        /* Animações */
+        @keyframes carHover {
+            0%, 100% { 
+                transform: translateY(0px) rotateX(0deg) rotateY(0deg); 
+            }
+            25% { 
+                transform: translateY(-8px) rotateX(2deg) rotateY(-1deg); 
+            }
+            50% { 
+                transform: translateY(-5px) rotateX(-1deg) rotateY(1deg); 
+            }
+            75% { 
+                transform: translateY(-10px) rotateX(3deg) rotateY(-2deg); 
+            }
+        }
+
+        @keyframes wheelSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes speedLines {
+            0% { 
+                opacity: 0; 
+                transform: translateX(0px); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: translateX(200px); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateX(400px); 
+            }
+        }
+
+        @keyframes dustFloat {
+            0% { 
+                opacity: 1; 
+                transform: translateX(0px) translateY(0px) scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateX(-150px) translateY(-30px) scale(0.3); 
+            }
+        }
+
+        /* Luzes de freio */
+        .brake-light {
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ff1744, #d50000);
+            border-radius: 50%;
+            position: absolute;
+            top: 55px;
+            right: 15px;
+            box-shadow: 0 0 15px #ff1744;
+            animation: brakeGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes brakeGlow {
+            0%, 70% { 
+                opacity: 0.3; 
+                box-shadow: 0 0 10px #ff1744; 
+            }
+            85%, 100% { 
+                opacity: 1; 
+                box-shadow: 0 0 25px #ff1744, 0 0 35px #ff1744; 
+            }
+        }
+
+        /* Texto informativo */
+        .info-text {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            font-size: 18px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .info-text h2 {
+            color: #ff1744;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="f1-container">
+        <div class="f1-car">
+            <!-- Corpo principal -->
+            <div class="car-chassis"></div>
+            
+            <!-- Cockpit -->
+            <div class="cockpit"></div>
+            
+            <!-- Bico -->
+            <div class="nose"></div>
+            
+            <!-- Asas -->
+            <div class="front-wing"></div>
+            <div class="rear-wing">
+                <div class="rear-wing-support"></div>
+                <div class="rear-wing-main"></div>
+            </div>
+            
+            <!-- Rodas dianteiras -->
+            <div class="front-wheel left">
+                <div class="tire-detail"></div>
+            </div>
+            <div class="front-wheel right">
+                <div class="tire-detail"></div>
+            </div>
+            
+            <!-- Rodas traseiras -->
+            <div class="rear-wheel left">
+                <div class="tire-detail"></div>
+            </div>
+            <div class="rear-wheel right">
+                <div class="tire-detail"></div>
+            </div>
+            
+            <!-- Espelhos -->
+            <div class="mirror left"></div>
+            <div class="mirror right"></div>
+            
+            <!-- Número do carro -->
+            <div class="car-number">1</div>
+            
+            <!-- Luzes de freio -->
+            <div class="brake-light"></div>
+            
+            <!-- Efeitos de movimento -->
+            <div class="speed-lines"></div>
+            <div class="dust-particle"></div>
+            <div class="dust-particle"></div>
+            <div class="dust-particle"></div>
+        </div>
+    </div>
+    
+    <div class="info-text">
+        <h2>🏎️ Fórmula 1</h2>
+        <p>Carro construído 100% com CSS puro</p>
+    </div>
+</body>
+</html>
